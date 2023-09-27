@@ -3,6 +3,7 @@ import csv
 
 # Set path for file
 csvpath = os.path.join('Pybank', 'Resources.csv')
+Outputpath = os.path.join('Pybank', 'Analysis')
 
 # Open and read CSV
 with open(csvpath) as csvfile:
@@ -40,12 +41,9 @@ with open(csvpath) as csvfile:
     print("Greatest decrease in profits: " + str(months[OverallChange.index(min(OverallChange))+1]) + " " + "$" + str(GreatestDecrease))
 
     # output to a text file
-    file = open("output.txt","w")
-    file.write("Financial Analysis" + "\n")
-    file.write("...................................................................................." + "\n")
-    file.write("total months: " + str(total_months) + "\n")
-    file.write("Total: " + "$" + str(sum(P)) + "\n")
-    file.write("Average change: " + "$" + str(revenue_average) + "\n")
-    file.write("Greatest Increase in Profits: " + str(months[revenue_change.index(max(revenue_change))+1]) + " " + "$" + str(greatest_increase) + "\n")
-    file.write("Greatest Decrease in Profits: " + str(months[revenue_change.index(min(revenue_change))+1]) + " " + "$" + str(greatest_decrease) + "\n")
-    file.close()
+with open(Outputpath, "w") as FinalTextFile:
+    FinalTextFile.write(
+        "Financial Analysis\n"
+        "............................................................\n"
+        "Total Months: " + (str(SumMonths)) + ('\n')
+        )

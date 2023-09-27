@@ -3,23 +3,18 @@ import csv
 
 # set path for file
 csvpath = os.path.join('PyPoll', 'Resources.csv')
+Outputpath = os.path.join('PyPoll', 'Analysis')
 
-# add variable
+# set variables
+WinningCount = 0
 TotalVotes = 0
-CandidateVotes = {}
-VotedCandidates = []
+WinningPercentage = 0
+WinningCandidate = ""
 
-# candidate_index={0,1,2}
-
-# TotalCandidats = 0
-# CandidateVotes = 0
-# Candidate1Total = 0
-# Candidate2Total = 0
-# Candidate3Total = 0
-
-Candidates = []
-
-
+# set lists
+CandidateVotesdict = {}
+Votes = []
+VotedCandidatesList = []
 
 # open and read csv
 with open (csvpath) as csvfile:
@@ -29,25 +24,49 @@ with open (csvpath) as csvfile:
     csv_header = next(csv_reader)
     print ("Election Results")
     print("--------------------------------------")
-
+    
     # loop through file
     for row in csv_reader:
-        Candidates.append(row[2])
-        Ballots = row
-        TotalVotes =+1
+        Votes.append(row[0])
+        SumVotes = len(Votes)
 
-    # sort candidates and find unique
-SortedCandidates = sorted(Candidates)
-for i in range(len(SortedCandidates)):
-    if SortedCandidates[i]!= SortedCandidates[i-1]:
-        VotedCandidates.append(SortedCandidates[i-1])
+        # assign columns (candidate names)
+        ColumnNames = row[2]
+        TotalVotes +=1
+    
+        # Assign conditionals for candidates
+        if ColumnNames in CandidateVotesdict:
+            # VotedCandidatesList.append(ColumnNames)
 
-for Candidate in VotedCandidates:
+            # Set the count with dictionary, at 0 and add each vote
+            CandidateVotesdict[ColumnNames] +=1
+        else:
+            CandidateVotesdict[ColumnNames] = 1
 
-        # loop to find sum for each candidate
-    for i in range(len(Candidates)):
-        if Candidates[i] ==Candidates:
-            votes = votes+1
-     # add votes per candidate
-        CandidateVotes.append(votes)
-        
+    # print and transfer to Analysis
+    print ('Total Votes: ' + str(SumVotes))
+
+    # New loop for candidate list
+    for ColumnNames in CandidateVotesdict:
+        Votes = CandidateVotesdict[ColumnNames]
+
+        # percentage
+        VotePercentage = float(float(Votes) / float(SumVotes)) * 100
+
+        # print and transfer to Analysis
+        print(f'{ColumnNames}: {VotePercentage:.1f}% ({Votes:,})')
+
+        # Determine winning count with boolean
+        if (Votes > WinningCount) and (VotePercentage > WinningPercentage):
+            WinningCount = Votes
+            WinningPercentage = VotePercentage
+            # winner
+            Winner = ColumnNames
+            # print(Winner)
+
+# Transfer to Analysis
+with open(Outputpath, "w") as FinalTextFile:
+    FinalTextFile.write(
+        "Election Results\n"
+        "--------------------------------------\n"
+        )
